@@ -1,0 +1,182 @@
+// 🍪 Convolution Bakery Engine (Fixed & Clean Copy)
+// Slide, Scale & Stack in LTI System
+
+int N = 10;
+
+float[] d;              // input impulses
+float[] b = {3, 2, 1}; // impulse response
+float[] c;              // output
+
+int currentShift = 0;
+boolean play = true;
+
+float leftX, spacing;
+float inputBaseY, kernelBaseY, outputBaseY;
+float blockScale = 22;
+
+void setup() {
+  fullScreen();
+  orientation(LANDSCAPE);
+
+  leftX = width * 0.22;
+  spacing = (width - leftX - 60) / (float)(N - 1);
+
+  inputBaseY = height * 0.25;
+  kernelBaseY = height * 0.50;
+  outputBaseY = height * 0.82;
+
+  d = new float[N];
+  c = new float[N];
+
+  d[0] = 1;
+  d[1] = 1;
+
+  computeConvolution();
+}
+
+void draw() {
+  background(248, 239, 212);
+
+  drawHeader();
+  drawTimeline();
+  drawInput();
+  drawKernel();
+  drawOutput();
+
+  if (play && frameCount % 45 == 0) {
+    currentShift++;
+    if (currentShift >= N) currentShift = 0;
+  }
+}
+
+void drawHeader() {
+  fill(40, 30, 15);
+  textSize(26);
+  textAlign(LEFT, CENTER);
+  text("🍪 Convolution Bakery Engine", 40, 40);
+
+  textSize(14);
+  fill(80);
+  text("Shift = " + currentShift, 40, 70);
+}
+
+void drawTimeline() {
+  stroke(120);
+  line(leftX, inputBaseY, width - 40, inputBaseY);
+  line(leftX, outputBaseY, width - 40, outputBaseY);
+
+  for (int i = 0; i < N; i++) {
+    float x = leftX + i * spacing;
+
+    stroke(150);
+    line(x, inputBaseY - 5, x, inputBaseY + 5);
+    line(x, outputBaseY - 5, x, outputBaseY + 5);
+
+    fill(60);
+    textAlign(CENTER);
+    text(i, x, inputBaseY + 15);
+    text(i, x, outputBaseY + 15);
+  }
+}
+
+void drawInput() {
+  fill(0);
+  textAlign(LEFT);
+  text("Input d[n]", 40, inputBaseY - 20);
+
+  for (int i = 0; i < N; i++) {
+    if (d[i] != 0) {
+      float x = leftX + i * spacing;
+      float h = d[i] * blockScale;
+
+      fill(0, 150, 255);
+      rect(x - 12, inputBaseY - h, 24, h);
+    }
+  }
+}
+
+void drawKernel() {
+  fill(0);
+  text("Impulse b[n]", 40, kernelBaseY - 20);
+
+  for (int i = 0; i < b.length; i++) {
+    float x = leftX + i * spacing;
+    float h = b[i] * blockScale;
+
+    fill(255, 170, 60);
+    rect(x - 12, kernelBaseY - h / 2, 24, h);
+
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text(int(b[i]), x, kernelBaseY);
+  }
+}
+
+void drawOutput() {
+  fill(0);
+  textAlign(LEFT);
+  text("Output c[n]", 40, outputBaseY - 30);
+
+  float[] stack = new float[N];
+
+  for (int i = 0; i <= currentShift; i++) {
+    if (d[i] == 0) continue;
+
+    for (int k = 0; k < b.length; k++) {
+      int out = i + k;
+      if (out < N) {
+        float val = d[i] * b[k];
+        float h = val * blockScale;
+
+        float x = leftX + out * spacing;
+        float y = outputBaseY - stack[out] - h;
+
+        if (i == currentShift) fill(255, 0, 0);
+        else fill(255, 0, 0, 120);
+
+        rect(x - 12, y, 24, h);
+
+        stack[out] += h;
+      }
+    }
+  }
+
+  stroke(255, 0, 0);
+  float px = leftX + currentShift * spacing;
+  line(px, inputBaseY, px, outputBaseY);
+}
+
+void computeConvolution() {
+  for (int n = 0; n < N; n++) {
+    float sum = 0;
+    for (int k = 0; k < b.length; k++) {
+      int idx = n - k;
+      if (idx >= 0 && idx < N) {
+        sum += d[idx] * b[k];
+      }
+    }
+    c[n] = sum;
+  }
+}
+
+void mousePressed() {
+  int idx = round((mouseX - leftX) / spacing);
+  if (idx >= 0 && idx < N) {
+    d[idx] = (d[idx] + 1) % 3;
+    computeConvolution();
+  } else {
+    play = !play;
+  }
+}
+
+void keyPressed() {
+  if (key == ' ') play = !play;
+
+  if (key == 'r' || key == 'R') {
+    for (int i = 0; i < N; i++) d[i] = 0;
+    d[0] = 1;
+    d[1] = 1;
+    currentShift = 0;
+    computeConvolution();
+  }
+}
