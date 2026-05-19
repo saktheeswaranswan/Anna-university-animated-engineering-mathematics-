@@ -1,0 +1,279 @@
+how to be an engineer
+step one learn convolutions all right
+this should be easy
+okay let's not give up yet
+there are many practical scenarios where
+convolutions are useful
+funnily enough once you understand the
+fundamental motivation behind
+convolutions they are not as convoluted
+as the name might lead you to think
+today i hope to get you to realize that
+the convolution is an elegant way of
+describing many of the systems and
+technologies that we use
+but for now let's ignore the physics and
+engineering today we'll be talking about
+bakeries let's say you have a bakery in
+town that you really like but they have
+the strange policy on cookies if you
+give one dollar on one day you have to
+wait until the next day to get a cookie
+but you get a second cookie the day
+after
+so remember this one dollar in two
+cookies out
+the idea itself is very simple so let's
+start putting some numbers around it
+here we have a timeline that shows the
+number of days that pass
+here we have the function d of t d for
+dollar which tells us how many dollars
+we're giving to the bakery every single
+day
+here is the function c of t c for
+cookies which tells us how many cookies
+we receive every day
+and here is the function b of t b for
+bakery which is the bakery's response to
+us paying one dollar
+b of t is what we would call the impulse
+response of the bakery so from now on i
+will use the terms b of t or impulse
+response interchangeably
+there's nothing stopping us from putting
+two impulse responses on the same number
+line if we give an extra dollar a couple
+of days later
+no matter where we put the second dollar
+we get the same response
+we get to slide around the response
+along the number line without fear of
+the bakery changing its policy
+if you can slide the impulse response
+all over the time access without having
+a change you can call the system time
+invariant
+the bakery's response to your dollar
+does not vary with time
+now the position we have here is a very
+curious one what happens if we take the
+red response and slide it one more space
+to the left in other words what happens
+if we give one dollar to the bakery two
+days in a row feel free to pause and
+take a guess yourself before i continue
+ready
+so not only do the responses of the
+bakery slide around on the timeline they
+also stack on top of one another if you
+give two dollars on one day then you get
+two cookies the next day and two cookies
+the following day because the responses
+stack completely on top of one another
+however we don't have to think of this
+as stacking anymore
+what's actually happening here is that
+the responses are scaling
+i scaled my input of one dollar to two
+dollars so the bakery scales up its
+response by two
+this scaling is a natural result of the
+stacking property that we already
+presented earlier
+when a system has the stacking and
+scaling property we call that a linear
+system
+linear simply means that the response is
+stack
+and they scale so remember this stacking
+and scaling
+so now we have two fancy words to
+describe our bakery it is time invariant
+and it's linear or linear time and
+variance but remember even though this
+is a lot of syllables and can be a
+little intimidating all it means is that
+the system
+slides stacks and scales its responses
+slides stacks and scales remember that
+now now let's say you move out of town
+and you find another bakery
+this bakery has a different policy if
+you chip in one dollar it responds with
+three cookies one day two cookies the
+next day and one cookie the following
+day
+this is what the linear time and variant
+properties would look like for this
+bakery
+[Music]
+let's observe a couple more combinations
+of impulse responses
+[Music]
+hey wait a minute
+linear
+you know what that reminds me of
+linear algebra
+if a system is linear which means it
+stacks and it scales it is usually a
+good idea to go and investigate and see
+if there are any connections with
+matrices and vectors and we will do that
+right now now if you don't know what
+matrix multiplication is yet then you
+might struggle with this next bit but if
+you do know how to multiply matrices
+then you will do just fine now we were
+talking about cookies and dollars and
+bakeries so where are the vectors well
+actually they've been here the whole
+time i've been showing you they're all
+up here
+as per convention we're going to tip
+these vectors over so that they're
+standing straight up with time
+increasing as we go down the vector
+also i will now put the dollar function
+on the right and the cookie function on
+the left in linear algebra it is typical
+for the input to go on the right and the
+output to appear on the left and we know
+that there's a linear relationship
+between the c vector and the d vector so
+perhaps we need to multiply the d vector
+the dollar vector by a matrix to get the
+c vector so with the knowledge that we
+have now about how the responses slide
+stack
+and scale on top of one another we can
+figure out what this matrix is let's
+start with a simple example with the
+dollar vector being one zero zero zero
+all the way down
+which means that we give one dollar one
+day and don't give it any more dollars
+and we already know what this first
+column looks like because we know
+what happens when we give this bakery
+one dollar
+it will be a copy of the bakery's
+impulse response
+we can do the same thing if we just move
+the one down if we just give one dollar
+on the next day and we receive the same
+response but it shifted down a bit
+because obviously if you give one dollar
+a day later then your response is going
+to be a day later
+we can keep repeating this pattern for
+all the other columns of the matrix for
+now we will arbitrarily make this a 7x7
+matrix but keep in mind that this matrix
+can be any size
+within each column you just get a
+shifted version of the bakery's response
+which is three two one along the rows
+you also get copies of the impulse
+response you also get a copy of three
+two one so this matrix has a symmetry
+along its anti-diagonal
+since a matrix multiplication is a dot
+product between rows and columns time
+moves left to right along the rows so
+the rows of the matrix are reflected and
+shifted copies of the impulse response
+[Music]
+now that we have an idea of what the
+matrix looks like we can generalize this
+expression so that for any sequence of
+dollars we give to any bakery we can
+predict the sequence of cookies we
+receive
+generalizing the input is rather simple
+and so is generalizing the impulse
+response matrix
+since the elements of the output vector
+is a sequence of dot products between
+the input and the matrix rows we can
+express the output vector like this
+[Music]
+this negative sign reflects the impulse
+response and this negative sign shifts
+it
+as time increases the shift increases so
+we know the output is a function of the
+shift
+but how is it possible to have b of t
+minus t
+[Music]
+well when you apply a linear operator to
+a function of time the unit of time will
+be canceled out and replaced with
+another unit such as in the fourier
+transform where time is replaced with
+frequency
+in this case the original time variable
+is being replaced by another time
+variable which can be pretty confusing
+at first
+we must distinguish the two different
+time variables with another symbol
+let's express the input time variable as
+tau and the output time variable with
+the t
+[Music]
+now we have a general expression of the
+output vector which is a single dot
+product as a function of the shift t
+[Music]
+if we write out this dot product more
+explicitly with the sigma notation
+this is what that expression would look
+like
+and if we want to express this whole
+system with continuous functions we can
+morph that sigma sum into an integral
+does this look familiar
+[Music]
+this integral is called the convolution
+we can use an asterisk to represent it
+as an operator between two functions
+this expression is useful for any linear
+time and variance systems out there
+let's take a look at some real world
+examples
+[Music]
+if you are an electrical engineer you
+will run into capacitors and inductors
+which are components that store energy
+in other words it is in their very
+nature to stack and scale their inputs
+even if you do not know the dirty
+details of the math the qualitative
+behavior of capacitors and inductors
+should lead you to intuitively
+understand why convolutions are
+applicable
+have you ever seen this footage this is
+tacoma narrows bridge and this rocking
+motion is the bridge's response to the
+wind it collapsed in 1940
+[Music]
+even though it is so counter-intuitive
+to think that the wind can blow away a
+rigid structure this happens because the
+bridge was able to accumulate and stack
+its vibration responses to the wind and
+when enough small responses stack up
+they can rock the bridge
+[Music]
+there are so many more interesting
+problems and ideas about convolution
+that i want to share but if i explain
+them all this video will be too long so
+instead i'll list them out here in order
+of increasing difficulty hopefully these
+give you something fun to think about
+that's all for today i'll see you in the
+next video
